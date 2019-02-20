@@ -42,8 +42,8 @@ const char* HMAC::getArrayFromString(String source) {
 // Methods
 void HMAC::digest()
 {
-	unsigned char local_mac[64] = {'\0'};
-	char converted_mac[64*2+1];
+	unsigned char local_mac[32];
+	char converted_mac[32*2+1];
 
 	mbedtls_md_context_t ctx;
 	mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256; //this->type;
@@ -59,14 +59,10 @@ void HMAC::digest()
   	mbedtls_md_free(&ctx);	
 
 	for(int i = 0; i < sizeof(local_mac); i++) {
-		if(local_mac[i] != '\0') {
-			sprintf(&converted_mac[i*2], "%02X", (int)local_mac[i]);
-		}
-		else {
-			break;
-		}
+			sprintf(&converted_mac[i*2], "%02x", local_mac[i]);
 	}
 
+	std::cout << converted_mac << std::endl;
 	this->hmac_hash = converted_mac;
 	this->is_digested = true;
 }
