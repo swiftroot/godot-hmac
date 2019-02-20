@@ -7,15 +7,15 @@ Class for generating HMAC strings in Godot
 
 
 #include "hmac.h"
-#include "mbedtls/md.h"
-#include "mbedtls/sha256.h"
+#include <thirdparty/mbedtls/include/mbedtls/sha256.h>
 
 // Init
 HMAC::HMAC() {
 }
 
-HMAC::sha_256(data, key)
+void HMAC::sha_256(int data, int key)
 {
+	return;
 }
 // Methods
 

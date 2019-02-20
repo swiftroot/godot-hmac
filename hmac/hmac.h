@@ -17,6 +17,7 @@ class HMAC : public Reference {
 		static void _bind_methods();
 	public:
 		void get_token();
+		void sha_256(int data, int key);
 
 		HMAC();
 };

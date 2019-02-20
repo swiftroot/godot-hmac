@@ -1,9 +1,9 @@
 #include "register_types.h"
-#include "device_check.h"
+#include "hmac.h"
 #include <core/class_db.h>
 #include <core/engine.h>
 
-void register_devicecheck_types() {
+void register_hmac_types() {
 	//  ClassDB is not a good idea in this case. If it doesn't exist, there is no way to check.
 	ClassDB::register_class<HMAC>();
 	
@@ -11,5 +11,5 @@ void register_devicecheck_types() {
 
 }
 
-void unregister_devicecheck_types() {
+void unregister_hmac_types() {
 }
