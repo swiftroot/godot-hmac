@@ -11,6 +11,7 @@ Class for generating HMAC strings in Godot
 #include <string>
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
 
 // Init
 void HMAC::init(String p_secret,String p_payload, unsigned int p_type)
@@ -32,25 +33,17 @@ void HMAC::setPayload(String val) {
 void HMAC::setType(unsigned int val) {this->type = val;}
 
 const char* HMAC::getArrayFromString(String source) {
-	char dest[source.length()+1];
-	const char *destPointer;
-
-	int i;
-	for(i = 0; i < source.length(); i++)
-	{
-		dest[i] = (unsigned char)source[i];
-	}
-	dest[i+1] = '\0';
-
-	destPointer = dest;
-	return destPointer;
+	CharString source8 = source.utf8();
+	const char *sourceChars = source8.ptr();
+	
+	return sourceChars;
 }
 
 // Methods
 void HMAC::digest()
 {
 	unsigned char local_mac[64] = {'\0'};
-	char payload_buffer[512] = {'\0'};
+	char converted_mac[64*2+1];
 
 	mbedtls_md_context_t ctx;
 	mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256; //this->type;
@@ -59,37 +52,36 @@ void HMAC::digest()
 	const size_t payload_length = strlen(this->payloadArray);
 	
 	mbedtls_md_init(&ctx);
-	mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(md_type), 1);
-	mbedtls_md_hmac_starts(&ctx, (const unsigned char*)this->secretArray, key_length);
-	mbedtls_md_hmac_update(&ctx, (const unsigned char*)payload_buffer, payload_length);
-	mbedtls_md_hmac_finish(&ctx, local_mac);
-	mbedtls_md_free(&ctx);	
+  	mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(md_type), 1);
+  	mbedtls_md_hmac_starts(&ctx, (const unsigned char *) this->secretArray, key_length);
+  	mbedtls_md_hmac_update(&ctx, (const unsigned char *) this->payloadArray, payload_length);
+  	mbedtls_md_hmac_finish(&ctx, local_mac);
+  	mbedtls_md_free(&ctx);	
 
-	this->hmac_hash = local_mac;
+	for(int i = 0; i < sizeof(local_mac); i++) {
+		if(local_mac[i] != '\0') {
+			sprintf(&converted_mac[i*2], "%02X", (int)local_mac[i]);
+		}
+		else {
+			break;
+		}
+	}
+
+	this->hmac_hash = converted_mac;
 	this->is_digested = true;
 }
 
-String* HMAC::getHMAC(){
-	String *returnMac = new String();
-	const char *local_hash = reinterpret_cast<const char*>(this->hmac_hash);
-
-	size_t hmac_length = strlen(local_hash);
-
-	int i = 0;
-	for(i = 0; i < hmac_length; i++)
-	{
-		returnMac += this->hmac_hash[i];
+String HMAC::getHMAC(){
+	if(this->is_digested) { 
+		return this->hmac_hash;
 	}
 
-	return returnMac;
+	return "";
 }
 
 void HMAC::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("init"), &HMAC::init);
 	ClassDB::bind_method(D_METHOD("digest"), &HMAC::digest);
 	ClassDB::bind_method(D_METHOD("get_hmac"), &HMAC::getHMAC);
-
 }
-
-
 

@@ -17,8 +17,7 @@ class HMAC : public Reference {
 	GDCLASS(HMAC, Reference);
 
 	private:
-		unsigned char *hmac_hash;
-		String secret, payload;
+		String secret, payload, hmac_hash;
 		const char *secretArray, *payloadArray;
 		unsigned int type;
 		bool is_digested;
@@ -34,7 +33,7 @@ class HMAC : public Reference {
 		void setType(unsigned int type);
 		void digest();
 
-		String* getHMAC();
+		String getHMAC();
 		
 		HMAC() {
 			type = 6; //SHA256 default 
