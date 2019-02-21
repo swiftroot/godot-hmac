@@ -17,27 +17,28 @@ class HMAC : public Reference {
 	GDCLASS(HMAC, Reference);
 
 	private:
-		String secret, payload, hmac_hash;
+		PoolByteArray secret, payload; 
+		String hmac_hash, type;
+		mbedtls_md_type_t md_type;
 		const char *secretArray, *payloadArray;
-		unsigned int type;
 		bool is_digested;
-
-		const char *getArrayFromString(String source);
+		bool is_init;
 	protected:
 		static void _bind_methods();
 	public:
-		
-		void init(String p_secret, String p_payload, unsigned int p_type);
-		void setSecret(String secret);
-		void setPayload(String payload);
-		void setType(unsigned int type);
+		void init(PoolByteArray p_secret, PoolByteArray p_payload, String p_type = "sha256");
+		void setSecret(PoolByteArray secret);
+		void setPayload(PoolByteArray payload);
+		void setType(String type);
 		void digest();
 
 		String getHMAC();
 		
 		HMAC() {
-			type = 6; //SHA256 default 
+			type = "sha256"; 
+			md_type = MBEDTLS_MD_SHA256;
 			is_digested = false;
+			is_init = false;
 		}
 };
 #endif
