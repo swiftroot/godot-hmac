@@ -18,13 +18,32 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 
 [node name="info_label" type="Label" parent="panel"]
-margin_top = 39.3333
-margin_right = 637.0
-margin_bottom = 99.3333
+margin_left = 0.666626
+margin_top = 19.3333
+margin_right = 637.667
+margin_bottom = 79.3333
 text = "This is a HMAC Example project by Swift Root Inc.
 
-Note: This uses the MBED library and should work on all platforms."
+This module uses the MBED library and should work on all platforms."
 align = 1
+valign = 1
+
+[node name="info_label2" type="Label" parent="panel"]
+margin_left = 1.0
+margin_top = 415.0
+margin_right = 310.0
+margin_bottom = 434.0
+text = "Cypher type:"
+align = 2
+valign = 1
+
+[node name="info_label3" type="Label" parent="panel"]
+margin_left = 50.0
+margin_top = 447.0
+margin_right = 598.0
+margin_bottom = 466.0
+text = "Supported: none, md2, md4, md5, sha1, sha224, sha256, sha384, sha512, ripemd160"
+align = 2
 valign = 1
 
 [node name="payload" type="TextEdit" parent="panel"]
@@ -41,14 +60,14 @@ margin_right = 604.0
 margin_bottom = 392.0
 text = "Change this to your secret."
 
-[node name="cypher" type="TextEdit" parent="panel"]
-margin_left = 43.0
-margin_top = 410.0
-margin_right = 604.0
-margin_bottom = 442.0
-text = "Change this to cypher type. Options: sha256"
+[node name="hash_type" type="TextEdit" parent="panel"]
+margin_left = 323.0
+margin_top = 415.0
+margin_right = 603.0
+margin_bottom = 437.0
+text = "sha256"
 
-[node name="hmac" type="TextEdit" parent="panel"]
+[node name="result" type="TextEdit" parent="panel"]
 margin_left = 37.0
 margin_top = 549.0
 margin_right = 603.0
