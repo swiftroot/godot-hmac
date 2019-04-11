@@ -17,6 +17,8 @@ class HMAC : public Reference {
 	GDCLASS(HMAC, Reference);
 
 	private:
+		int mac_size;
+	
 		PoolByteArray secret, payload; 
 		String hmac_hash, type;
 		mbedtls_md_type_t md_type;

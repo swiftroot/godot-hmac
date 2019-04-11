@@ -25,17 +25,33 @@ void HMAC::setPayload(PoolByteArray val) {
 
 void HMAC::setType(String val) {
 	this->type = val;
+	this->mac_size = 32;
 
 	if (val == "sha256") { this->md_type = MBEDTLS_MD_SHA256; }
 	else if(val == "none") { this->md_type = MBEDTLS_MD_NONE;}
-	else if(val == "md2") { this->md_type = MBEDTLS_MD_MD2;}
+	else if(val == "md2") { this->md_type = MBEDTLS_MD_MD2; }
 	else if(val == "md4") { this->md_type = MBEDTLS_MD_MD4;}
 	else if(val == "md5") { this->md_type = MBEDTLS_MD_MD5;}
-	else if(val == "sha1") { this->md_type = MBEDTLS_MD_SHA1;}
-	else if(val == "sha224") { this->md_type = MBEDTLS_MD_SHA224;}
-	else if(val == "sha384") { this->md_type = MBEDTLS_MD_SHA384;}
-	else if(val == "sha512") { this->md_type = MBEDTLS_MD_SHA512;}
-	else if(val == "ripemd160") { this->md_type = MBEDTLS_MD_RIPEMD160;}
+	else if(val == "sha1") { 
+		this->md_type = MBEDTLS_MD_SHA1;
+		this->mac_size = 20;
+	}
+	else if(val == "sha224") { 
+		this->md_type = MBEDTLS_MD_SHA224;
+		this->mac_size = 28;
+	}
+	else if(val == "sha384") { 
+		this->md_type = MBEDTLS_MD_SHA384;
+		this->mac_size = 48;
+	}
+	else if(val == "sha512") { 
+		this->md_type = MBEDTLS_MD_SHA512;
+		this->mac_size = 64;
+	}
+	else if(val == "ripemd160") {
+		this->md_type = MBEDTLS_MD_RIPEMD160;
+		this->mac_size = 20;
+	}
 }
 
 // Methods
@@ -46,8 +62,8 @@ void HMAC::digest()
 		return; 
 	}
 
-	unsigned char local_mac[32];
-	char converted_mac[32*2];
+	unsigned char local_mac[this->mac_size];
+	char converted_mac[this->mac_size*2]; // = this->converted_mac;
 
 	mbedtls_md_context_t ctx;
 
