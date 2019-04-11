@@ -63,7 +63,7 @@ void HMAC::digest()
 	}
 
 	unsigned char local_mac[this->mac_size];
-	char converted_mac[this->mac_size*2]; // = this->converted_mac;
+	char converted_mac[this->mac_size*2+1];
 
 	mbedtls_md_context_t ctx;
 
